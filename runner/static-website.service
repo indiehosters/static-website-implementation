@@ -1,0 +1,15 @@
+[Unit]
+Description=StaticWebiste
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill static-website
+ExecStartPre=-/usr/bin/docker rm static-website
+ExecStartPre=/usr/bin/docker pull nginx
+ExecStart=/usr/bin/docker run --name static-website -v /data/server-wide/static-website:/usr/local/nginx/html:ro -p 80:80 -d nginx
+
+[Install]
+WantedBy=multi-user.target
